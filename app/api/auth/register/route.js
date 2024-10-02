@@ -5,8 +5,12 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export async function POST(req) {
-  const { email, password } = await req.json(); // Get request body as JSON
+  // Hardcoded values for testing
+  const password = "password123";
+  const email = "unique_email@example.com"; // Change this to a unique email
 
+
+  // Check for empty email or password
   if (!email || !password) {
     return NextResponse.json({ error: 'Missing email or password' }, { status: 400 });
   }
@@ -25,7 +29,7 @@ export async function POST(req) {
 
     return NextResponse.json(user, { status: 201 });
   } catch (error) {
-    console.error('Error creating user:', error);
-    return NextResponse.json({ error: 'User creation failed' }, { status: 500 });
+    console.error('Error creating user:', error); // Log the full error
+    return NextResponse.json({ error: 'User creation failed', details: error.message }, { status: 500 });
   }
 }
